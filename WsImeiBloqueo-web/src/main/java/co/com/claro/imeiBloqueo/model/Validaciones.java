@@ -24,7 +24,7 @@ public class Validaciones {
         }
     }
 
-    public GenericResponse objetoLleno(Imeibloqueo objeto) {
+    public GenericResponse imeiBloqueoLleno(Imeibloqueo objeto) {
         GenericResponse response = new GenericResponse(true, "");
         try {
             if ((!campoLleno(objeto.getMsisdn() + "") || objeto.getMsisdn() == Long.parseLong("0"))) {
@@ -42,6 +42,24 @@ public class Validaciones {
             if (!campoLleno(objeto.getOperation())) {
                 response.setIsValid(false);
                 response.setDescription(response.getDescription() + ", operation");
+            }
+            if (!campoLleno(objeto.getStatus())) {
+                response.setIsValid(false);
+                response.setDescription(response.getDescription() + ", status");
+            }
+        } catch (Exception e) {
+            response.setDescription("Error inesperado: " + e.getMessage());
+            response.setIsValid(null);
+        }
+        return response;
+    }
+
+    public GenericResponse updateImeiBloqueoLleno(UpdateImeiBloqueo objeto) {
+        GenericResponse response = new GenericResponse(true, "");
+        try {
+            if (!campoLleno(objeto.getImei())) {
+                response.setIsValid(false);
+                response.setDescription(response.getDescription() + ", imei");
             }
             if (!campoLleno(objeto.getStatus())) {
                 response.setIsValid(false);

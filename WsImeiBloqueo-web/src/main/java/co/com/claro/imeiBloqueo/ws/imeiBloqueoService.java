@@ -9,6 +9,7 @@ import co.com.claro.imeiBloqueo.entity.Imeibloqueo;
 import co.com.claro.imeiBloqueo.facade.ImeibloqueoFacade;
 import co.com.claro.imeiBloqueo.model.DataResponse;
 import co.com.claro.imeiBloqueo.model.GenericResponse;
+import co.com.claro.imeiBloqueo.model.UpdateImeiBloqueo;
 import co.com.claro.imeiBloqueo.model.Validaciones;
 import java.util.Date;
 import java.util.List;
@@ -75,7 +76,7 @@ public class imeiBloqueoService {
         DataResponse responseEnd = new DataResponse();
         try {
             Validaciones val = new Validaciones();
-            GenericResponse validaciones = val.objetoLleno(imeiBloqueo);
+            GenericResponse validaciones = val.imeiBloqueoLleno(imeiBloqueo);
             if (validaciones.getIsValid()) {
                 List<Imeibloqueo> existe = imeiFacade.queryByIMEI(imeiBloqueo.getImei() + "");
                 if (existe == null) {
@@ -100,6 +101,45 @@ public class imeiBloqueoService {
 
         } catch (Exception e) {
             GenericResponse response = new GenericResponse(false, "Error al insertar en ImeiBloqueo. Detalle: " + e.getMessage());
+            responseEnd.setResponse(response);
+            responseEnd.setImeiBloqueo(null);
+        }
+        return responseEnd;
+    }
+
+    @PUT
+    @Consumes("application/json")
+    @Produces("application/json")
+    @Path("updateImeiBloqueo")
+    public DataResponse updateImeiBloqueo(UpdateImeiBloqueo update) {
+        DataResponse responseEnd = new DataResponse();
+        try {
+            Validaciones val = new Validaciones();
+            GenericResponse validaciones = val.updateImeiBloqueoLleno(update);
+            if (validaciones.getIsValid()) {
+                List<Imeibloqueo> encontrados = imeiFacade.queryByIMEI(update.getImei() + "");
+                if (encontrados != null) {
+                    Imeibloqueo objetUpdate = encontrados.get(0);
+                    objetUpdate.setStatus(update.getStatus());
+                    imeiFacade.edit(objetUpdate);
+                    responseEnd.setImeiBloqueo(null);
+                    GenericResponse response = new GenericResponse(true, "Registro actualizado exitosamente.");
+                    responseEnd.setResponse(response);
+                } else {
+                    GenericResponse response = new GenericResponse(false, "No se encontraron registros con el IMEI: " + update.getImei() + ".");
+                    responseEnd.setResponse(response);
+                    responseEnd.setImeiBloqueo(null);
+                }
+            } else if (validaciones.getIsValid() == null) {
+                responseEnd.setResponse(validaciones);
+                responseEnd.setImeiBloqueo(null);
+            } else {
+                validaciones.setDescription("Campos obligatorios no encontados" + validaciones.getDescription() + ". Por favor agregarlos.");
+                responseEnd.setResponse(validaciones);
+                responseEnd.setImeiBloqueo(null);
+            }
+        } catch (Exception e) {
+            GenericResponse response = new GenericResponse(false, "Error al actualizar en ImeiBloqueo. Detalle: " + e.getMessage());
             responseEnd.setResponse(response);
             responseEnd.setImeiBloqueo(null);
         }
