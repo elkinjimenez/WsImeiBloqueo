@@ -6,6 +6,7 @@
 package co.com.claro.imeiBloqueo.facade;
 
 import co.com.claro.imeiBloqueo.entity.Imeibloqueo;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -28,5 +29,14 @@ public class ImeibloqueoFacade extends AbstractFacade<Imeibloqueo> {
     public ImeibloqueoFacade() {
         super(Imeibloqueo.class);
     }
-    
+
+    public List<Imeibloqueo> queryByIMEI(String imei) {
+        List<Imeibloqueo> list = (List<Imeibloqueo>) em.createQuery("SELECT i FROM Imeibloqueo i WHERE i.imei='" + imei + "' ORDER BY i.reportDate").getResultList();
+        if (!list.isEmpty()) {
+            return list;
+        } else {
+            return null;
+        }
+    }
+
 }
