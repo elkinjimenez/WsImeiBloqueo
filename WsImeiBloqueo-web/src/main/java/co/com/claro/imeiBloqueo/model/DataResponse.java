@@ -1,5 +1,6 @@
 package co.com.claro.imeiBloqueo.model;
 
+import co.com.claro.imeiBloqueo.entity.Imeibloqueo;
 import java.util.List;
 import lombok.*;
 
@@ -12,8 +13,8 @@ public class DataResponse {
     @Setter
     private GenericResponse response;
 
-//    @Getter
-//    @Setter
-//    private List<Imeibloqueo> imeiBloqueo;
+    @Getter
+    @Setter
+    private List<Imeibloqueo> imeiBloqueo;
 
 }

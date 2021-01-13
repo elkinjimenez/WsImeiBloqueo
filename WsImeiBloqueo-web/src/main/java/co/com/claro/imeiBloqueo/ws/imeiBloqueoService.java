@@ -5,6 +5,8 @@
  */
 package co.com.claro.imeiBloqueo.ws;
 
+import co.com.claro.imeiBloqueo.entity.Imeibloqueo;
+import co.com.claro.imeiBloqueo.facade.ImeibloqueoFacade;
 import co.com.claro.imeiBloqueo.model.DataResponse;
 import co.com.claro.imeiBloqueo.model.GenericResponse;
 import java.util.Date;
@@ -19,15 +21,15 @@ import javax.ejb.TransactionManagement;
 
 /**
  *
- * @author ElkinJ
+ * @author omarMad
  */
 @Path("imeiBloqueo")
 @Stateless
 @TransactionManagement
 public class imeiBloqueoService {
 
-//    @EJB
-//    private ImeibloqueoFacade imeiBloqueoFacade;
+    @EJB
+    private ImeibloqueoFacade imeiFacade;
 
     public imeiBloqueoService() {
     }
@@ -36,8 +38,12 @@ public class imeiBloqueoService {
     @Consumes("application/json")
     @Produces("application/json")
     @Path("queryByImei")
-    public List<Imeibloqueo> queryByImei() {
-        return imeiBloqueoFacade.findAll();
+    public List<Imeibloqueo> searchCode() {
+        try {
+            return imeiFacade.findAll();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     @POST
@@ -48,14 +54,14 @@ public class imeiBloqueoService {
         DataResponse responseEnd = new DataResponse();
         try {
             imeiBloqueo.setReportDate(new Date());
-            imeiBloqueoFacade.create(imeiBloqueo);
-//            responseEnd.setImeiBloqueo(null);
-            GenericResponse response = new GenericResponse(true, "Consulta exitosa.");
+            imeiFacade.create(imeiBloqueo);
+            responseEnd.setImeiBloqueo(null);
+            GenericResponse response = new GenericResponse(true, "Registro agregado exitosamente.");
             responseEnd.setResponse(response);
         } catch (Exception e) {
             GenericResponse response = new GenericResponse(false, "Error al consultar en ImeiBloque. Detalle: " + e.getMessage());
             responseEnd.setResponse(response);
-//            responseEnd.setImeiBloqueo(null);
+            responseEnd.setImeiBloqueo(null);
         }
         return responseEnd;
     }
