@@ -39,12 +39,32 @@ public class imeiBloqueoService {
     @Consumes("application/json")
     @Produces("application/json")
     @Path("queryByImei")
-    public List<Imeibloqueo> searchCode() {
+    public DataResponse searchCode(@QueryParam("imei") String imei) {
+        DataResponse responseEnd = new DataResponse();
         try {
-            return imeiFacade.findAll();
+            Validaciones val = new Validaciones();
+            if (val.campoLleno(imei)) {
+                List<Imeibloqueo> list = imeiFacade.queryByIMEI(imei);
+                if (list != null) {
+                    GenericResponse response = new GenericResponse(true, "Consulta exitosa.");
+                    responseEnd.setResponse(response);
+                    responseEnd.setImeiBloqueo(list);
+                } else {
+                    GenericResponse response = new GenericResponse(false, "No se encontraron registros con el IMEI " + imei + ".");
+                    responseEnd.setResponse(response);
+                    responseEnd.setImeiBloqueo(null);
+                }
+            } else {
+                GenericResponse response = new GenericResponse(false, "Campo 'imei' no encontrado. Por favor enviarlo.");
+                responseEnd.setResponse(response);
+                responseEnd.setImeiBloqueo(null);
+            }
         } catch (Exception e) {
-            return null;
+            GenericResponse response = new GenericResponse(false, "Error al consultar en ImeiBloqueo. Detalle: " + e.getMessage());
+            responseEnd.setResponse(response);
+            responseEnd.setImeiBloqueo(null);
         }
+        return responseEnd;
     }
 
     @POST
@@ -79,7 +99,7 @@ public class imeiBloqueoService {
             }
 
         } catch (Exception e) {
-            GenericResponse response = new GenericResponse(false, "Error al consultar en ImeiBloqueo. Detalle: " + e.getMessage());
+            GenericResponse response = new GenericResponse(false, "Error al insertar en ImeiBloqueo. Detalle: " + e.getMessage());
             responseEnd.setResponse(response);
             responseEnd.setImeiBloqueo(null);
         }
