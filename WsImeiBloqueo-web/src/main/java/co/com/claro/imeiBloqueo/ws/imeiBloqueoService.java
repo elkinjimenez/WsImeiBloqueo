@@ -39,7 +39,7 @@ public class imeiBloqueoService {
     @GET
     @Consumes("application/json")
     @Produces("application/json")
-    @Path("queryByImei")
+    @Path("QueryByImei")
     public DataResponse searchCode(@QueryParam("imei") String imei) {
         DataResponse responseEnd = new DataResponse();
         try {
@@ -71,7 +71,7 @@ public class imeiBloqueoService {
     @POST
     @Consumes("application/json")
     @Produces("application/json")
-    @Path("createImeiBloqueo")
+    @Path("CreateImeiBlocking")
     public DataResponse createImeiBloqueo(Imeibloqueo imeiBloqueo) {
         DataResponse responseEnd = new DataResponse();
         try {
@@ -110,7 +110,7 @@ public class imeiBloqueoService {
     @PUT
     @Consumes("application/json")
     @Produces("application/json")
-    @Path("updateImeiBloqueo")
+    @Path("UpdateImeiBlocking")
     public DataResponse updateImeiBloqueo(UpdateImeiBloqueo update) {
         DataResponse responseEnd = new DataResponse();
         try {

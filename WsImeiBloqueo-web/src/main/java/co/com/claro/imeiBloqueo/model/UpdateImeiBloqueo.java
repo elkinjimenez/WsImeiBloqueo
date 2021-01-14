@@ -5,6 +5,8 @@
  */
 package co.com.claro.imeiBloqueo.model;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,14 +14,17 @@ import lombok.Setter;
  *
  * @author jimenezelkg
  */
+@XmlRootElement(name = "UpdateImeiBloqueo")
 public class UpdateImeiBloqueo {
 
     @Getter
     @Setter
+    @XmlElement(required = true)
     private String imei;
 
     @Getter
     @Setter
+    @XmlElement(required = true)
     private String status;
 
     public UpdateImeiBloqueo() {

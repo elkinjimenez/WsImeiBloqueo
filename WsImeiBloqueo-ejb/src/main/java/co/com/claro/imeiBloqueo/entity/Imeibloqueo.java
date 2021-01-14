@@ -21,6 +21,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -29,7 +30,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @Entity
 @Table(name = "IMEIBLOQUEO")
-@XmlRootElement
+@XmlRootElement (name = "Imeibloqueo")
 @NamedQueries({
     @NamedQuery(name = "Imeibloqueo.findAll", query = "SELECT i FROM Imeibloqueo i")
     , @NamedQuery(name = "Imeibloqueo.findById", query = "SELECT i FROM Imeibloqueo i WHERE i.id = :id")
@@ -51,34 +52,41 @@ public class Imeibloqueo implements Serializable {
             initialValue = 1, allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.AUTO,
             generator = "IMEIBLOQUEO_SEQ")
+    @XmlElement(required = true)
     private Long id;
     @Basic(optional = false)
     @NotNull
     @Column(name = "MSISDN")
+    @XmlElement(required = true)
     private long msisdn;
     @Basic(optional = false)
     @NotNull
     @Column(name = "IMEI")
+    @XmlElement(required = true)
     private long imei;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 50)
     @Column(name = "REPORT_TYPE")
+    @XmlElement(required = true)
     private String reportType;
     @Basic(optional = false)
     @NotNull
     @Column(name = "REPORT_DATE")
     @Temporal(TemporalType.TIMESTAMP)
+    @XmlElement(required = true)
     private Date reportDate;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 50)
     @Column(name = "OPERATION")
+    @XmlElement(required = true)
     private String operation;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 50)
     @Column(name = "STATUS")
+    @XmlElement(required = true)    
     private String status;
 
     public Imeibloqueo() {
