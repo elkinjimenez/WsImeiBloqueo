@@ -86,9 +86,15 @@ public class imeiBloqueoService {
                     GenericResponse response = new GenericResponse(true, "Registro agregado exitosamente.");
                     responseEnd.setResponse(response);
                 } else {
-                    GenericResponse response = new GenericResponse(false, "IMEI " + imeiBloqueo.getImei() + " ya se encuentra registrado.");
+                    Imeibloqueo objetUpdate = existe.get(0);
+                    objetUpdate.setReportDate(new Date());
+                    objetUpdate.setStatus(imeiBloqueo.getStatus());
+                    objetUpdate.setMsisdn(imeiBloqueo.getMsisdn());
+                    imeiFacade.edit(objetUpdate);
+                    // ACTUALICÉLO
+                    GenericResponse response = new GenericResponse(true, "IMEI " + imeiBloqueo.getImei() + " ya se encuentraba registrado. Se actualiza el estado y la fecha.");
                     responseEnd.setResponse(response);
-                    responseEnd.setImeiBloqueo(null);
+                    responseEnd.setImeiBloqueo(imeiFacade.queryByIMEI(imeiBloqueo.getImei() + ""));
                 }
             } else if (validaciones.getIsValid() == null) {
                 responseEnd.setResponse(validaciones);
